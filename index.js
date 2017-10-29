@@ -4,7 +4,10 @@ const Rules = require('atomizer/src/rules')
 
 const StyleEntry = ({ matcher, styleName, argumentKey, argumentValue }) => {
     return (
-        <li>{`${matcher}(${argumentKey}) ${styleName}: ${argumentValue}`}</li>
+        <li>
+            <span className="Fz(1.1em)">{`${matcher}(${argumentKey}) `}</span>
+            <span className="Fz(1.05em) C(#f2438c)">{`${styleName}: ${argumentValue}`}</span>
+        </li>
     )
 }
 
@@ -62,6 +65,7 @@ class App extends React.Component {
         return (
             <div className="Px(10px) Py(6px)">
                 <div className="W(300px)">
+                    <h1 className="Fz(1.5em) Mt(0)">Atomic CSS Reference</h1>
                     <input
                         className="W(100%) Bdrs(3px) Bgc(white) Bdc(#dbdbdb) Bd Fz(1rem) Lh(1.5) Px(10px) Py(6px) Bxz(bb) C(#363636)"
                         type="text"
