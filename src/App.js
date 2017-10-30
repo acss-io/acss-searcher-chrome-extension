@@ -11,7 +11,6 @@ const StyleEntry = ({ matcher, styleName, argumentKey, argumentValue }) => {
 };
 
 const ResultsEntry = ({ data }) => {
-    console.log('===data', data);
     const { name, arguments: { '0': argument = {} } = [], matcher, styles } = data;
     const styleName = Object.keys(styles)[0];
     return (
