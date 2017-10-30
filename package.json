@@ -1,5 +1,5 @@
 {
-    "name": "acss-searcher-chrome-extension2",
+    "name": "acss-searcher-chrome-extension",
     "version": "0.2.0",
     "description": "A handy Atomic CSS class searcher on Chrome extension",
     "private": true,
