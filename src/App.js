@@ -1,5 +1,8 @@
 import React from 'react';
 import Rules from 'atomizer/src/rules';
+import _debounce from 'lodash/debounce';
+
+const SEARCH_TEXT_DEBOUNCE_MS = 300;
 
 const StyleEntry = ({ matcher, styleName, argumentKey, argumentValue }) => {
     return (
@@ -51,7 +54,9 @@ class App extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {};
-        this.onTextChange = this.onTextChange.bind(this);
+
+        this.handleChange = this.handleChange.bind(this);
+        this.updateSearchText = _debounce(this.updateSearchText, SEARCH_TEXT_DEBOUNCE_MS);
     }
 
     render() {
@@ -64,7 +69,7 @@ class App extends React.PureComponent {
                         className="W(100%) Bdrs(3px) Bgc(white) Bdc(#dbdbdb) Bd Fz(1rem) Lh(1.5) Px(10px) Py(6px) Bxz(bb) C(#363636)"
                         type="text"
                         placeholder="search for styles"
-                        onChange={this.onTextChange}
+                        onChange={this.handleChange}
                     />
                 </div>
                 <Results searchText={searchText} />
@@ -72,8 +77,12 @@ class App extends React.PureComponent {
         );
     }
 
-    onTextChange(event) {
-        const { target: { value = '' } = {} } = event;
+    handleChange(event) {
+        const { target: { value } } = event;
+        this.updateSearchText(value);
+    }
+
+    updateSearchText(value) {
         this.setState({
             searchText: value.trim()
         });
