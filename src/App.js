@@ -1,6 +1,5 @@
-const React = require('react')
-const ReactDOM = require('react-dom')
-const Rules = require('atomizer/src/rules')
+import React from 'react';
+import Rules from 'atomizer/src/rules';
 
 const StyleEntry = ({ matcher, styleName, argumentKey, argumentValue }) => {
     return (
@@ -8,18 +7,13 @@ const StyleEntry = ({ matcher, styleName, argumentKey, argumentValue }) => {
             <span className="Fz(1.1em)">{`${matcher}(${argumentKey}) `}</span>
             <span className="Fz(1.05em) C(#f2438c)">{`${styleName}: ${argumentValue}`}</span>
         </li>
-    )
-}
+    );
+};
 
 const ResultsEntry = ({ data }) => {
-    console.log('===data', data)
-    const {
-        name,
-        arguments: { '0': argument = {} } = [],
-        matcher,
-        styles,
-    } = data
-    const styleName = Object.keys(styles)[0]
+    console.log('===data', data);
+    const { name, arguments: { '0': argument = {} } = [], matcher, styles } = data;
+    const styleName = Object.keys(styles)[0];
     return (
         <div>
             <h3>{name}</h3>
@@ -33,35 +27,36 @@ const ResultsEntry = ({ data }) => {
                             argumentKey={key}
                             argumentValue={argument[key]}
                         />
-                    )
+                    );
                 })}
             </ul>
         </div>
-    )
-}
+    );
+};
 
 const Results = ({ searchText }) => {
-    const regex = new RegExp(`${searchText}`, 'i')
+    const regex = new RegExp(`${searchText}`, 'i');
     const result = Rules.filter(rule => {
-        return rule.name.search(regex) > -1
-    })
+        return rule.name.search(regex) > -1;
+    });
     return (
         <div className="Mah(450px) Ov(a)">
             {result.map((entry, index) => {
-                return <ResultsEntry data={entry} key={`result-${index}`} />
+                return <ResultsEntry data={entry} key={`result-${index}`} />;
             })}
         </div>
-    )
-}
+    );
+};
 
-class App extends React.Component {
+class App extends React.PureComponent {
     constructor(props) {
-        super(props)
-        this.state = {}
-        this.onTextChange = this.onTextChange.bind(this)
+        super(props);
+        this.state = {};
+        this.onTextChange = this.onTextChange.bind(this);
     }
+
     render() {
-        const { searchText } = this.state
+        const { searchText } = this.state;
         return (
             <div className="Px(10px) Py(6px)">
                 <div className="W(300px)">
@@ -75,15 +70,15 @@ class App extends React.Component {
                 </div>
                 <Results searchText={searchText} />
             </div>
-        )
+        );
     }
 
     onTextChange(event) {
-        const { target: { value = '' } = {} } = event
+        const { target: { value = '' } = {} } = event;
         this.setState({
-            searchText: value.trim(),
-        })
+            searchText: value.trim()
+        });
     }
 }
 
-ReactDOM.render(<App />, document.querySelector('#main'))
+export default App;

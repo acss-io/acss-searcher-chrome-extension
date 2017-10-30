@@ -1,5 +1,5 @@
 module.exports = {
-    cssDest: 'build/css/main.css',
+    cssDest: 'public/css/main.css',
     options: {},
     configs: {
         breakPoints: {
