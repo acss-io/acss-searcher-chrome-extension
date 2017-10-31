@@ -13,13 +13,23 @@ const StyleEntry = ({ matcher, styleName, argumentKey, argumentValue }) => {
     );
 };
 
+const CUSTOM_PARAM = '<custom-param>';
+const VALUE = '<value> or ';
+
 const ResultsEntry = ({ data }) => {
-    const { name, arguments: { '0': argument = {} } = [], matcher, styles } = data;
+    const { allowParamToValue, name, arguments: { '0': argument = {} } = [], matcher, styles } = data;
     const styleName = Object.keys(styles)[0];
     return (
         <div>
             <h3>{name}</h3>
             <ul>
+                <li>
+                    <span className="Fz(1.1em) Mend(8px)">{`${matcher}(${allowParamToValue
+                        ? VALUE
+                        : ''}${CUSTOM_PARAM})`}</span>
+                    <span className="Fz(1.05em) C(#f2438c)">{styleName}: </span>
+                    <span className="C(#07f)">value</span>
+                </li>
                 {Object.keys(argument).map(key => {
                     return (
                         <StyleEntry
@@ -39,7 +49,7 @@ const ResultsEntry = ({ data }) => {
 const Results = ({ searchText }) => {
     const regex = new RegExp(`${searchText}`, 'i');
     const result = Rules.filter(rule => {
-        return rule.name.search(regex) > -1;
+        return rule.name.search(regex) > -1 || rule.matcher.search(regex) > -1;
     });
     return (
         <div className="Mah(450px) Ov(a)">
@@ -84,7 +94,7 @@ class App extends React.PureComponent {
 
     updateSearchText(value) {
         this.setState({
-            searchText: value.trim()
+            searchText: value.trim(),
         });
     }
 }
