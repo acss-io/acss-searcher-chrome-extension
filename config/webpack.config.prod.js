@@ -143,10 +143,20 @@ module.exports = {
                     {
                         test: /\.(js|jsx)$/,
                         include: paths.appSrc,
-                        loader: require.resolve('babel-loader'),
-                        options: {
-                            compact: true
-                        }
+                        use: [
+                            {
+                                loader: 'webpack-atomizer-loader',
+                                query: {
+                                    configPath: path.resolve('./config/atomic.js')
+                                }
+                            },
+                            {
+                                loader: require.resolve('babel-loader'),
+                                options: {
+                                    compact: true
+                                }
+                            }
+                        ]
                     },
                     // The notation here is somewhat confusing.
                     // "postcss" loader applies autoprefixer to our CSS.
