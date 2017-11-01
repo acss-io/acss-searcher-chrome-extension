@@ -19,14 +19,13 @@ const VALUE = '<value> or ';
 const ResultsEntry = ({ data }) => {
     const { allowParamToValue, name, arguments: { '0': argument = {} } = [], matcher, styles } = data;
     const styleName = Object.keys(styles)[0];
+    const matcherValueString = allowParamToValue ? VALUE : '';
     return (
         <div>
             <h3>{name}</h3>
             <ul>
                 <li>
-                    <span className="Fz(1.1em) Mend(8px)">{`${matcher}(${allowParamToValue
-                        ? VALUE
-                        : ''}${CUSTOM_PARAM})`}</span>
+                    <span className="Fz(1.1em) Mend(8px)">{`${matcher}(${matcherValueString}${CUSTOM_PARAM})`}</span>
                     <span className="Fz(1.05em) C(#f2438c)">{styleName}: </span>
                     <span className="C(#07f)">value</span>
                 </li>
@@ -52,7 +51,7 @@ const Results = ({ searchText }) => {
         return rule.name.search(regex) > -1 || rule.matcher.search(regex) > -1;
     });
     return (
-        <div className="Mah(450px) Ov(a)">
+        <div className="Mah(500px) Ov(a)">
             {result.map((entry, index) => {
                 return <ResultsEntry data={entry} key={`result-${index}`} />;
             })}
@@ -73,7 +72,7 @@ class App extends React.PureComponent {
         const { searchText } = this.state;
         return (
             <div className="Px(10px) Py(6px)">
-                <div className="W(300px)">
+                <div className="W(500px)">
                     <h1 className="Fz(1.5em) Mt(0)">Atomic CSS Reference</h1>
                     <input
                         className="W(100%) Bdrs(3px) Bgc(white) Bdc(#dbdbdb) Bd Fz(1rem) Lh(1.5) Px(10px) Py(6px) Bxz(bb) C(#363636)"
@@ -94,7 +93,7 @@ class App extends React.PureComponent {
 
     updateSearchText(value) {
         this.setState({
-            searchText: value.trim(),
+            searchText: value.trim()
         });
     }
 }
