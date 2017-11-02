@@ -2,13 +2,38 @@ import React from 'react';
 import Rules from 'atomizer/src/rules';
 import _debounce from 'lodash/debounce';
 
+let processedRules;
+try {
+    processedRules = JSON.stringify(Rules);
+    processedRules = replaceRTLTokens(processedRules);
+    processedRules = JSON.parse(processedRules);
+} catch (e) {
+    processedRules = Rules;
+    console.error('[ACSS searcher] process rules failed');
+}
+
+function replaceRTLTokens(str = '') {
+    if (typeof str !== 'string') {
+        return str;
+    }
+    return str.replace(/__START__/g, 'left').replace(/__END__/g, 'right');
+}
+
 const SEARCH_TEXT_DEBOUNCE_MS = 300;
 
-const StyleEntry = ({ matcher, styleName, argumentKey, argumentValue }) => {
+const StyleEntry = ({ matcher, styleNames = [], argumentKey, argumentValue }) => {
     return (
-        <li>
+        <li className="D(f)">
             <span className="Fz(1.1em)">{`${matcher}(${argumentKey}) `}</span>
-            <span className="Fz(1.05em) C(#f2438c)">{`${styleName}: ${argumentValue}`}</span>
+            <ul className="List(n) Pstart(10px)">
+                {styleNames.map((styleName, index) => {
+                    return (
+                        <li key={`${matcher}-${styleName}-${index}`}>
+                            <span className="Fz(1.05em) C(#f2438c)">{`${styleName}: ${argumentValue}`}</span>
+                        </li>
+                    );
+                })}
+            </ul>
         </li>
     );
 };
@@ -18,23 +43,31 @@ const VALUE = '<value> or ';
 
 const ResultsEntry = ({ data }) => {
     const { allowParamToValue, name, arguments: { '0': argument = {} } = [], matcher, styles } = data;
-    const styleName = Object.keys(styles)[0];
+    const styleNames = Object.keys(styles);
     const matcherValueString = allowParamToValue ? VALUE : '';
     return (
         <div>
             <h3>{name}</h3>
             <ul>
-                <li>
-                    <span className="Fz(1.1em) Mend(8px)">{`${matcher}(${matcherValueString}${CUSTOM_PARAM})`}</span>
-                    <span className="Fz(1.05em) C(#f2438c)">{styleName}: </span>
-                    <span className="C(#07f)">value</span>
+                <li className="D(f)">
+                    <span className="Fz(1.1em)">{`${matcher}(${matcherValueString}${CUSTOM_PARAM})`}</span>
+                    <ul className="List(n) Pstart(10px)">
+                        {styleNames.map((styleName, index) => {
+                            return (
+                                <li key={`style-name-${index}`}>
+                                    <span className="Fz(1.05em) C(#f2438c)">{styleName}: </span>
+                                    <span className="C(#07f)">value</span>
+                                </li>
+                            );
+                        })}
+                    </ul>
                 </li>
                 {Object.keys(argument).map(key => {
                     return (
                         <StyleEntry
                             key={`style-entry-${key}`}
                             matcher={matcher}
-                            styleName={styleName}
+                            styleNames={styleNames}
                             argumentKey={key}
                             argumentValue={argument[key]}
                         />
@@ -47,7 +80,7 @@ const ResultsEntry = ({ data }) => {
 
 const Results = ({ searchText }) => {
     const regex = new RegExp(`${searchText}`, 'i');
-    const result = Rules.filter(rule => {
+    const result = processedRules.filter(rule => {
         return rule.name.search(regex) > -1 || rule.matcher.search(regex) > -1;
     });
     return (
@@ -93,7 +126,7 @@ class App extends React.PureComponent {
 
     updateSearchText(value) {
         this.setState({
-            searchText: value.trim()
+            searchText: value.trim(),
         });
     }
 }
