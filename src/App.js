@@ -1,6 +1,6 @@
 import React from 'react';
 import Rules from 'atomizer/src/rules';
-import _debounce from 'lodash/debounce';
+import { autobind, debounce, pureComponent, initialState } from 'react-decoration';
 
 let processedRules;
 try {
@@ -92,15 +92,9 @@ const Results = ({ searchText }) => {
     );
 };
 
-class App extends React.PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {};
-
-        this.handleChange = this.handleChange.bind(this);
-        this.updateSearchText = _debounce(this.updateSearchText, SEARCH_TEXT_DEBOUNCE_MS);
-    }
-
+@initialState({})
+@pureComponent
+class App {
     render() {
         const { searchText } = this.state;
         return (
@@ -119,11 +113,14 @@ class App extends React.PureComponent {
         );
     }
 
+    @autobind
     handleChange(event) {
         const { target: { value } } = event;
         this.updateSearchText(value);
     }
 
+    @autobind
+    @debounce(SEARCH_TEXT_DEBOUNCE_MS)
     updateSearchText(value) {
         this.setState({
             searchText: value.trim(),
