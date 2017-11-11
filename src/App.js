@@ -1,6 +1,7 @@
 import React from 'react';
 import Rules from 'atomizer/src/rules';
 import { autobind, debounce, pureComponent, initialState } from 'react-decoration';
+import escapeStringRegexp from 'escape-string-regexp';
 
 let processedRules;
 try {
@@ -78,8 +79,8 @@ const ResultsEntry = ({ data }) => {
     );
 };
 
-const Results = ({ searchText }) => {
-    const regex = new RegExp(`${searchText}`, 'i');
+const Results = ({ searchText = '' }) => {
+    const regex = new RegExp(`${escapeStringRegexp(searchText)}`, 'i');
     const result = processedRules.filter(rule => {
         return rule.name.search(regex) > -1 || rule.matcher.search(regex) > -1;
     });
