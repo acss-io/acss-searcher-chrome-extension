@@ -79,7 +79,10 @@ const ResultsEntry = ({ data }) => {
     );
 };
 
-const Results = ({ searchText = '' }) => {
+const Results = ({ searchText }) => {
+    if (!searchText) {
+        return null;
+    }
     const regex = new RegExp(`${escapeStringRegexp(searchText)}`, 'i');
     const result = processedRules.filter(rule => {
         return rule.name.search(regex) > -1 || rule.matcher.search(regex) > -1;
@@ -124,7 +127,7 @@ class App {
     @debounce(SEARCH_TEXT_DEBOUNCE_MS)
     updateSearchText(value) {
         this.setState({
-            searchText: value.trim(),
+            searchText: value.trim()
         });
     }
 }
