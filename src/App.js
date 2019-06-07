@@ -107,6 +107,7 @@ class App {
                     <h1 className="Fz(1.5em) Mt(0)">Atomic CSS Reference</h1>
                     <input
                         className="W(100%) Bdrs(3px) Bgc(white) Bdc(#dbdbdb) Bd Fz(1rem) Lh(1.5) Px(10px) Py(6px) Bxz(bb) C(#363636)"
+                        ref={elem => this.inputElem = elem}
                         type="text"
                         placeholder="search for styles"
                         onChange={this.handleChange}
@@ -129,6 +130,10 @@ class App {
         this.setState({
             searchText: value.trim()
         });
+    }
+
+    componentDidMount() {
+        this.inputElem.focus();
     }
 }
 
