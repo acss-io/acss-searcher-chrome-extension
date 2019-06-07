@@ -1,6 +1,6 @@
 {
     "name": "acss-searcher-chrome-extension",
-    "version": "0.3.3",
+    "version": "0.3.4",
     "description": "A handy Atomic CSS class searcher on Chrome extension",
     "private": true,
     "dependencies": {
